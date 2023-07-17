@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <cs50.h>
+
+int main(void)
+//add an enter function to proceed wiwth the instructions and the game
+
+{
+    int questionnumber = 1;
+    int a, b, c, d, e, f, g, h, j;
+    int totalpoints = 0, pointsq1 = 0, pointsq2 = 0, pointsq3 = 0, pointsq4 =0, pointsq5 = 0;
+
+
+//question 1
+    printf("\nquestion %d/10\n in what century did african trade explode? type option: 1, 2 or 3\n (1) 12th century\n (2) 15th century\n (3) 13th century\n: ", questionnumber);
+    scanf("%d", &a);
+
+        if (a == 2)
+            {
+                ++totalpoints; ++questionnumber; ++pointsq1;
+                printf("\ncorrect you gained 1 point\n");
+            }
+        else
+            {
+                printf("\nincorrect the correct answer is option (3)\n you scored no points \n");
+                ++questionnumber;
+            }
+
+ //question2
+    printf("\nquestion %i/10\n how many blocks in the pyramid of giza? type option: 1, 2 or 3\n (1) 200,000\n (2) 1,500,000\n (3) 2,500,000\n: ", questionnumber);
+    scanf("%i", &b);
+
+        if (b == 3)
+            {
+                ++totalpoints; ++questionnumber; ++pointsq2;
+                printf("\ncorrect you gained 1 point\n");
+            }
+        else
+            {
+                printf("\nincorrect the correct answer is option (3)\nyou scored no points\n");
+                ++questionnumber;
+            }
+
+
+//question3
+    printf("\nquestion %d/10\n which ammendment claimed to abolish slavery in the united states? type option: 1, 2 or 3\n (1) 1865\n (2) 1875\n (3) 1869\n: ", questionnumber);
+    scanf("%d", &c);
+        if (c == 1)
+            {
+                ++totalpoints; ++questionnumber;++pointsq3;
+                printf("\ncorrect you gained 1 point\n");
+            }
+        else
+            {
+                printf("\nincorrect the correct answer is option (1)\nyou scored no points\n");
+                ++questionnumber;
+            }
+
+//question 4
+//make different point system /3
+    printf("\nquestion %d/10: This question is worth 3 points\n\n Excluding slave labor, what 3 other professions did africans shipped during the maritime period have? you have three choices\n (1) horse riders\n (2) swimming instructors\n (3) linguists\n (4) prostitutes\n (5) sewage cleaners\n (6) pilots\n (7) nurses and doctors\n pick 3 numbers seperating each with a comma: \n", questionnumber);
+    scanf("%d,%d,%d", &d, &e, &f);
+
+        if (((d == 3) | ( d == 4 ) | (d == 6)) | ((e == 3) | ( e == 4 ) | (e == 6)) | ((f == 3) | ( f == 4 ) | (f == 6)))
+            {
+                if((d == 3) | ( d == 4 ) | (d == 6))
+                    {
+                        ++totalpoints; ++pointsq4;
+                        printf("\nchoice number %i is correct\n", d);
+
+                    }
+                if ((e == 3) | ( e == 4 ) | (e == 6))
+                    {
+                        ++totalpoints; ++pointsq4;
+                        printf("\nchoice numer %i is correct\n", e);
+                    }
+                if ((f == 3) | ( f == 4 ) | (f == 6))
+                    {
+                        ++totalpoints; ++pointsq4;
+                        printf("\nchoice number %i is correct\n", f);
+                    }
+                    printf("\nthe correct options are (3), (4) and  (6)\n\nyou scored %i/3 points for that round of questions\n\n\n", pointsq4);
+            }
+        else
+            {
+                ++questionnumber;
+                printf("\nall are incorrect, the correct options are (3), (4) and (6)\n");
+                printf("you scored zero points\n\n\n");
+            }
+
+    //question 5
+    printf("the final question of round 1 has 3 parts\n\n");
+    //part 1
+    printf("\nquestion %d/10 part 1\n what european country traded the highest volume of slaves during transatlanctic slavery? type option: 1, 2 or 3\n (1) portugese\n (2) british\n (3) dutch\n: ", questionnumber);
+    scanf("%d", &g);
+        if (g == 1)
+            {
+                ++totalpoints;++pointsq5;
+                printf("\ncorrect you gained %i/3 points\n", pointsq5);
+            }
+        else
+            {
+                printf("\nincorrect, the correct answer is option (1)\n\nyou scored no points so far\n");
+            }
+            //part2
+    printf("\nquestion %d/10 part 2\n Some of the first slaves taken to British colonies from Africa did so under the title of 'endentured servant'\n They had the same legal status and legal rights as contract workers from britain and ireland during that period\n What legal doctrine passed in the 17th century removed the basic human rights of africans reducing them to being the 'legal property@ of their slave owners?\n type option: 1, 2 or 3\n (1) Dum Diversas\n (2) Arte de Guerra no mar \n (3) Partus sequitur ventrem\n: ", questionnumber);
+    scanf("%d", &h);
+        if (h == 3)
+            {
+                ++totalpoints;++pointsq5;
+                printf("\ncorrect you gained %i/3 points\n", pointsq5);
+            }
+        else
+            {
+                printf("\nincorrect, the correct answer is option (3)\n\nyou maintain %i/3 points\n", pointsq5);
+
+            }
+            //part 3
+                printf("\nquestion %d/10 part 3\n The West African kingdom of Benin during the 1700's, benefited from selling their own people as slaves\n,  in return they recieved material goods such as gold, guns, gunpowder, and amicable trade relationships with western countries\n How much per year did the Kingdom of Benin reportedly make from particpating in the slave trade? type option: 1, 2 or 3\n (1) £10,000\n (2) £100,000 \n (3) £250,000\n: ", questionnumber);
+    scanf("%d", &j);
+        if (j == 3)
+            {
+                ++totalpoints;++pointsq5;
+                printf("\ncorrect you gained %i/3 points\n", pointsq5);
+            }
+        else
+            {
+                printf("\nincorrect, the correct answer is option (3)\n\nyou maintain %i/3 points\n", pointsq5);
+
+            }
+}
