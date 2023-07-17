@@ -1,0 +1,112 @@
+#Credit 
+#include <cs50.h>
+#include <stdio.h>
+
+int main(void)
+
+{
+    long card = get_long ("enter your card number: \n");
+    printf("Number:  %ld \n", card);
+    long cardcopy = card;
+    long cardcopybackup = card;
+    int counter = 2;
+    int sum = 0;
+
+    do
+    {
+    for (int stoploop = 0; stoploop<8; stoploop++)
+    {
+    cardcopy = cardcopy/10;
+    int digit1=cardcopy%10;
+    cardcopy = cardcopy/10;
+    int digit2 = digit1*2;
+
+            if (digit2 <=9)
+            {
+                sum+=digit2;
+
+            }
+
+            else if  (digit2 >=10)
+            {
+                int digit4 = digit2%10;
+                int digit3 = digit2/10;
+                sum+=digit4;
+                sum+=digit3;
+
+            }
+
+    }
+
+    for (int stoploop2 = 0; stoploop2<=8; stoploop2++)
+    {
+
+    int leftoverdigits=cardcopybackup%10;
+    cardcopybackup = cardcopybackup/100;
+    sum+=leftoverdigits;
+
+
+    }
+    }
+
+    while  (cardcopy!=0);
+    {
+
+
+    }
+
+    int checksum = sum%10;
+//////////////////////////////////////////////////////////////////////
+    do
+    {
+        card=card/10;
+        ++counter;
+    }
+
+
+    while (card >=99);
+    {
+
+        if ((card >=40 && card <=49 && checksum == 0))
+            {
+                if((counter == 13 || counter == 16))
+                {
+                    printf("VISA\n");
+                }
+                else
+                {
+                    printf("INVALID\n");
+                }
+            }
+
+        else if ((card ==34 || card ==37))
+            {
+                if(counter == 15)
+                {
+                    printf("AMEX\n");
+                }
+                else
+                {
+                    printf("INVALID\n");
+                }
+            }
+
+        else if ((card >=51 && card <=55))
+            {
+                if(counter == 16)
+                {
+                    printf("MASTERCARD\n");
+                }
+        else
+            {
+                printf("INVALID\n");
+            }
+            }
+
+        else
+            {
+            printf("INVALID\n");
+            }
+}
+
+}
