@@ -1,0 +1,74 @@
+#include <cs50.h>
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+
+int count_letters (char* string);
+int count_words (char* string);
+int count_sentences (char* string);
+
+int main(void)
+{
+    char* input = get_string ("enter text: ");
+
+    int characters = count_letters (input);
+    int words = count_words (input);
+    int sentences = count_sentences (input);
+
+    float averageletters = (float) characters / (float) words * 100;
+    float averagesentences =  (float) sentences / (float) words * 100;
+    float index =  (float) 0.0588 * (float) averageletters - (float) 0.296 * (float) averagesentences - (float) 15.8;
+
+    if (index <1)
+    {
+        printf ("Before Grade 1\n");
+    }
+    else if (index >16)
+    {
+        printf ("Grade 16+\n");
+    }
+    else if (index >=1 & index <=16)
+    {
+        printf ("Grade %.0f\n", round(index));
+    }
+    }
+
+
+int count_letters (char* string)
+{
+    int characters = 0;
+    for (int i = 0; i < strlen(string)+1; i++)
+    {
+        if ((string[i] >='a' && string[i] <='z') | (string[i] >='A' && string[i] <='Z'))
+        {
+            characters++;
+        }
+    }
+    return characters;
+}
+
+int count_words (char* string)
+{
+    int words = 0;
+    for (int i = 0; i < strlen(string)+1; i++)
+    {
+        if ((string[i] == 32) | (string[i] == '\0'))
+        {
+            words++;
+        }
+    }
+    return words;
+}
+
+int count_sentences (char* string)
+{
+    int sentences = 0;
+    for (int i = 0; i < strlen(string)+1; i++)
+    {
+        if ((string[i] == '.') | (string[i] == '!') | (string[i] == '?'))
+        {
+            sentences++;
+        }
+    }
+    return sentences;
+}
