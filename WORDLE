@@ -1,0 +1,243 @@
+#include <cs50.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+// each of our text files contains 1000 words
+#define LISTSIZE 1000
+
+// values for colors and score (EXACT == right letter, right place; CLOSE == right letter, wrong place; WRONG == wrong letter)
+#define EXACT 2
+#define CLOSE 1
+#define WRONG 0
+
+// ANSI color codes for boxed in letters
+#define GREEN "\e[38;2;255;255;255;1m\e[48;2;106;170;100;1m"
+#define YELLOW "\e[38;2;255;255;255;1m\e[48;2;201;180;88;1m"
+#define RED "\e[38;2;255;255;255;1m\e[48;2;220;20;60;1m"
+#define RESET "\e[0;39m"
+
+// user-defined function prototypes
+string get_guess(int wordsize);
+int check_word(string guess, int wordsize, int status[], string choice);
+void print_word(string guess, int wordsize, int status[]);
+
+int main(int argc, string argv[])
+{
+
+    // TODO #1
+    // ensure proper usage
+
+    if (argc != 2)
+    {
+        printf("Usage: ./wordle wordsize\n");
+        return 1;
+    }
+
+    int wordsize = atoi(argv[1]);
+
+    // TODO #2
+    // ensure argv[1] is either 5, 6, 7, or 8 and store that value in wordsize instead
+    if ((wordsize != 5) && (wordsize != 6) && (wordsize != 7) && (wordsize != 8))
+    {
+        printf("Error: wordsize must be either 5, 6, 7, or 8\n");
+        return 1;
+    }
+
+    // open correct file, each file has exactly LISTSIZE words
+    char wl_filename[6];
+    sprintf(wl_filename, "%i.txt", wordsize);
+    FILE *wordlist = fopen(wl_filename, "r");
+    if (wordlist == NULL)
+    {
+        printf("Error opening file %s.\n", wl_filename);
+        return 1;
+    }
+
+    // load word file into an array of size LISTSIZE
+    char options[LISTSIZE][wordsize + 1];
+
+    for (int i = 0; i < LISTSIZE; i++)
+    {
+        fscanf(wordlist, "%s", options[i]);
+    }
+
+    // pseudorandomly select a word for this game
+    srand(time(NULL));
+    string choice = options[rand() % LISTSIZE];
+    // printf("%s\n", choice);
+
+    // allow one more guess than the length of the word
+    int guesses = wordsize + 1;
+    bool won = false;
+
+    // print greeting, using ANSI color codes to demonstrate
+    printf(GREEN "This is WORDLE50" RESET "\n");
+    printf("You have %i tries to guess the %i-letter word I'm thinking of\n", guesses, wordsize);
+
+    // main game loop, one iteration for each guess
+    for (int i = 0; i < guesses;)
+    {
+        // TODO#3
+        string guess = get_guess(wordsize);
+
+        while (strlen(guess) != wordsize)
+        {
+            guess = get_guess(wordsize);
+        }
+
+        if (strlen(guess) == wordsize) // checking wordsize. if wordsize matches, even if you get it wrong, it increments guess
+        {
+            i++;
+        }
+
+        // TODO#4 // set all elements of status array initially to 0
+        // array to hold guess status, initially set to zero
+        int status[wordsize];
+        for (int t = 0; t < guesses; t++)
+        {
+            status[t] = 0;
+            // printf("checking status as %d\n", status[t]);
+        }
+
+        // Calculate score for the guess
+        int score = check_word(guess, wordsize, status, choice);
+
+        // Checking status
+        for (int h = 0; h < wordsize; h++)
+        {
+            // printf("checking status [0] as %d\n", status[h]);
+        }
+
+        // Print the guess
+        printf("Guess %i: ", i);
+        print_word(guess, wordsize, status);
+
+        // Print the score
+        // printf("total score is %i\n ", score);
+
+        // if they guessed it exactly right, set terminate loop
+        if (score == EXACT * wordsize)
+        {
+            won = true;
+            break;
+        }
+    }
+
+    // Print the game's result
+    // TODO#7
+
+    if (won == true)
+    {
+        printf("You Won and got all %i full points!\n", wordsize * 2);
+    }
+
+    else
+    {
+        printf("You Lost! the word is '%s'\n", choice);
+    }
+
+    return 0;
+    // that's all folks!
+}
+
+string get_guess(int wordsize)
+{
+    // ensure users actually provide a guess that is the correct length
+    // #3
+    string guess = get_string("Input a %i letter word: ", wordsize);
+
+    return guess;
+}
+
+int check_word(string guess, int wordsize, int status[], string choice)
+{
+    int score = 0;      // user score
+    int tmpc[wordsize]; // temporary status variable for choice
+    int tmpg[wordsize]; // temporary status variable for guess
+
+    for (int t = 0; t < wordsize; t++) // set temp status array to 0;
+    {
+        tmpg[t] = 0;
+        tmpc[t] = 0;
+    }
+
+    for (int i = 0; i < wordsize;) // compare 1 letter of guess
+    {
+        for (int j = 0; j < wordsize; j++) // with all letters of wotd
+        {
+
+            if ((choice[j] == guess[i]) && (j == i)) // if letter of choice and letter of guess are the same and ADJACENT
+            {
+                // printf(" when i is %i and j is %i the adjacent is %c %c\n", i,j,guess[i], choice[i]);
+                status[i] += 2; // make status at that location = 2 (GREEN)
+                score += 2;     // increment score to give 2 points
+            }
+
+            else if ((choice[j] == guess[i]) && (j != i)) // if letter of choice and letter of guess are the same but NOT ADJACENT
+            {
+                if ((choice[i] == guess[i]) | (choice[j] == guess[j])) // check if their are adjacent matches, if so, ignore
+                {
+                }
+                // if no adjacent matches but status of that location is not equal to 0, ignore
+                else if ((choice[j] == guess[i]) && (tmpg[i] >= 1) | (tmpc[j] >= 1))
+                {
+                }
+                // if letters of chocie and guess are the same, NOT ADJACENT, no adjacent matches, and status of that locaiton not
+                // >=1.
+                else
+                {
+                    // increment status on those guess memory locations
+                    tmpg[i] += 1;
+                    // increment status on choice memory location
+                    tmpc[j] += 1;
+                    // by assigning each memory location of choice and guess its own unique status, we can tell if its made an existing pair
+                    // and use it in our condition to prevent double pairings and get accurate color coding.
+                    // printf(" when i is %i and j is %i the letter non adjacent is %c %c\n", i,j, guess[i], choice[j]);
+                    status[i] += 1; // make status at that location +1 (YELLOW)
+                    score += 1;
+                }
+            }
+        }
+        i++;
+    }
+
+    return score;
+}
+
+// compare guess to choice and score points as appropriate, storing points in status
+// #5
+
+// HINTS
+// iterate over each letter of the guess
+// iterate over each letter of the choice
+// compare the current guess letter to the current choice letter
+// if they're the same position in the word, score EXACT points (green) and break so you don't compare that letter further
+// if it's in the word, but not the right spot, score CLOSE point (yellow)
+// keep track of the total score by adding each individual letter's score from above
+
+void print_word(string guess, int wordsize, int status[])
+{
+    // print word character-for-character with correct color coding, then reset terminal font to normal
+    // #6
+
+    for (int v = 0; v < wordsize; v++)
+    {
+        if (status[v] == 2)
+        {
+            printf(GREEN "%c " RESET, guess[v]);
+        }
+        else if (status[v] == 1)
+        {
+            printf(YELLOW "%c " RESET, guess[v]);
+        }
+        else if (status[v] == 0)
+        {
+            printf(RED "%c" RESET, guess[v]);
+        }
+    }
+    printf("\n");
+
+    return;
+}
